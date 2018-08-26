@@ -1,9 +1,9 @@
-#Wavemap 1.1
+#Wavemap 1.14
 
 #This program makes an OpenAir airspace file from a wave forecast map (downloaded png image).
-#Currently supported are COSMO-DE maps "Deutschland Nord", "Deutschland Mitte", "Deutschland Sued" and "Alpen".
+#Currently supported are COSMO-D2 maps "Deutschland Nord/Kuestengebiete", "Deutschland Mitte" and "Deutschland Sued/Alpenbereich"
 
-#(c) 2017 Benjamin Bachmaier
+#(c) 2018 Benjamin Bachmaier
 
 #www.flugfieber.net
 
@@ -22,53 +22,42 @@ smooth = 4		#Smoothing factor defining how aggressive irregularities in wave con
 def georef(px_x, px_y, maptype):
 	#Returns a string containing the geo-coordinates of a pixel
 	rtd = 180/pi
-	if maptype == 'alpen':	
-		y_NP = 3683.76422764
-		x_NP = 445.5
+
+	if maptype == 'dsued':
+		y_NP = 3066.6303030303
+		x_NP = 530.0
 
 		dx = x_NP-px_x
 		dy = y_NP+px_y
 		dist = sqrt(dx*dx+dy*dy)
-		lat = 0.000000209249420*dist*dist -0.011436747352329*dist+90.000010539530194
+		lat = 0.000000306366936*dist*dist -0.013485307234124*dist+90.000000000000014
 
 		c = atan(dx/dy)*rtd
-		lon = -1.011460842672144*c+9.997416742431932
-
-	elif maptype == 'dsued':
-		y_NP = 5163.5301204819
-		x_NP = 476.5
-
-		dx = x_NP-px_x
-		dy = y_NP+px_y
-		dist = sqrt(dx*dx+dy*dy)
-		lat = 0.000000117899841*dist*dist -0.008179191193347*dist+89.999999999999986
-
-		c = atan(dx/dy)*rtd
-		lon = -0.999522641321516*c+10.001359350792196
+		lon = -1.005793690115992*c+10.000812929875398
 
 	elif maptype == 'dmitte':
-		y_NP = 4915.56097
-		x_NP = 473.5
+		y_NP = 2759.3575757576
+		x_NP = 541.0
 
 		dx = x_NP-px_x
 		dy = y_NP+px_y
 		dist = sqrt(dx*dx+dy*dy)
-		lat = 0.000000093867125*dist*dist -0.007971583223335*dist+90.000000000000014
+		lat = 0.000000286854877*dist*dist-0.013435214773414*dist+90.0000000000000
 
 		c = atan(dx/dy)*rtd
-		lon = -1.011160313697560*c+9.996511362096365
+		lon = -1.005754777000518*c+9.999890059768152
 
 	elif maptype == 'dnord':
-		y_NP = 4582.90243902439
-		x_NP = 474.5
+		y_NP = 6022.10126582
+		x_NP = 550.0
 
 		dx = x_NP-px_x
 		dy = y_NP+px_y
 		dist = sqrt(dx*dx+dy*dy)
-		lat = 0.000000086136311*dist*dist-0.007940279894018*dist+90.000000000000014
+		lat = -0.000000943359028*dist*dist+0.000335858282526*dist+90.0000000000000-0.08
 
 		c = atan(dx/dy)*rtd
-		lon = -1.010245500195550*c+10.004147667638424
+		lon = -2.095342514979555*c+10.000000000000002
 	
 	#Now make formatted coordinates from the lat and lon decimal values
 	
@@ -123,7 +112,7 @@ error = 0
 if len(pixels) != w*h:
 	print("Fehler: Karte nicht im originalen Farbmodus (indexed)! Beende Programm...\n")
 	error = 1
-if len(pixels) != 663000:
+if len(pixels) != 750000:
 	print("Fehler: Karte besitzt nicht die richtigen Abmessungen! Beende Programm...\n")
 	error = 1
 
@@ -131,45 +120,35 @@ if len(pixels) != 663000:
 maptype = 'none'
 if error != 1:
 
-	x1 = 784
-	y1 = 425
-	x2 = 474
-	y2 = 252
+	x1 = 277
+	y1 = 460
+	x2 = 785
+	y2 = 654
 	p1 = y1*w+x1
 	p2 = y2*w+x2
 	if (pixels[p1] > 246 and pixels[p1] < 250) or (pixels[p2] > 246 and pixels[p2] < 250):
 		print("Karte 'Deutschland Nord' erkannt!")
 		maptype = 'dnord'
 
-	x1 = 184
-	y1 = 250
-	x2 = 866
-	y2 = 411
+	x1 = 243
+	y1 = 343
+	x2 = 776
+	y2 = 419
 	p1 = y1*w+x1
 	p2 = y2*w+x2
 	if (pixels[p1] > 246 and pixels[p1] < 250) or (pixels[p2] > 246 and pixels[p2] < 250):
 		print("Karte 'Deutschland Mitte' erkannt!")
 		maptype = 'dmitte'
 		
-	x1 = 402
-	y1 = 320
-	x2 = 869
-	y2 = 103
+	x1 = 107
+	y1 = 190
+	x2 = 633
+	y2 = 273
 	p1 = y1*w+x1
 	p2 = y2*w+x2
 	if (pixels[p1] > 246 and pixels[p1] < 250) or (pixels[p2] > 246 and pixels[p2] < 250):
 		print("Karte 'Deutschland Sued' erkannt!")
 		maptype = 'dsued'
-		
-	x1 = 354
-	y1 = 68
-	x2 = 885
-	y2 = 485
-	p1 = y1*w+x1
-	p2 = y2*w+x2
-	if (pixels[p1] > 246 and pixels[p1] < 250) or (pixels[p2] > 246 and pixels[p2] < 250):
-		print("Karte 'Alpen' erkannt!")
-		maptype = 'alpen'
 
 	if maptype == 'none':
 		print("Fehler: Karte wurde nicht erkannt! Beende Programm...\n")
@@ -178,16 +157,16 @@ if error != 1:
 	x_topleft = 2
 	y_topleft = 2
 	x_botright = 997
-	y_botright = 594
+	y_botright = 677
 	columns = 996
-	lines = 593
+	lines = 676
 
 	#------------------Step 3: Build map pixel zeromatrix and identify red shaded (climb) pixels as "1".
 
 	#Initialize matrix
 	matrix = [[0 for x in range(columns)] for y in range(lines)] 
 
-	#matrix has maximum index [592][995]
+	#matrix has maximum index [675][995]
 
 	#Read row by row into matrix and identify climb
 	j = y_topleft
@@ -353,10 +332,8 @@ if error != 1:
 				q = j		#Memorize coordinates of the wave beginning.
 				k = p
 				l = q		#Memorize coordinates of the current polygon point
-				fout.write("AC A\nAN WELLE\n")
-				geostring = georef(p,q,maptype)		#Georeference the point with coordinates p, q 
-				fout.write(geostring)				#Write these coordinates to file: 
-
+				points = 1
+				geostring_initial = georef(p,q,maptype)		#Georeference the point with coordinates p, q 
 				matrix[l][k] = 3 	#Point is done.
 				
 				#Search for neighboring point (starting right, going clockwise)
@@ -475,13 +452,22 @@ if error != 1:
 							t = t+1
 						
 						#Here is the new polygon point.
+						
+						#If this is the second polygon point, subsequently write the first point to the file (this kills single point airspace artefacts)
+						if points == 1:						
+							fout.write("AC A\nAN WELLE\n")
+							fout.write(geostring_initial)	
+						
+						#Now write the current point
 						geostring = georef(p,q,maptype)		#Georeference the point with coordinates p, q 
 						fout.write(geostring)				#Write these coordinates to file: 
 						matrix[q][p] = 3
+						points = points+1
 					
 				#If we ever get here, the wave has ended.
 				fout.write("\n")
 	
-	#If we ever get here, the entire map has been solved (No '2's left over.)
 	fout.close()
+	#If we ever get here, the entire map has been solved (No '2's left over.)
+	
 	print("OpenAir Luftraumdatei 'wavemap_openair.txt' geschrieben.")
