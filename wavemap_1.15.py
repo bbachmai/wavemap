@@ -1,4 +1,4 @@
-# Wavemap 1.15
+# Wavemap 1.16
 
 # This program makes an OpenAir airspace file from a wave forecast map (downloaded png image).
 # Currently supported are COSMO-D2 maps "Deutschland Nord/Kuestengebiete", "Deutschland Mitte" and "Deutschland Sued/Alpenbereich"
@@ -170,10 +170,10 @@ if error != 1:
           print("Karte 'Meteociel Nordost' erkannt!")
           maptype = 'meteociel_ne'
 
-     x1 = 407
-     y1 = 362
-     x2 = 379
-     y2 = 191
+     x1 = 232
+     y1 = 508
+     x2 = 651
+     y2 = 535
      p1 = y1*w+x1
      p2 = y2*w+x2
      if (pixels[p1] == pixels[p2] and pixels[p1] > 2):
