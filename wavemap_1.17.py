@@ -41,16 +41,16 @@ def georef(px_x, px_y, maptype):
           lon = -5.72284 + px_x * 0.01244 + px_y * 0.00101 - px_y * px_x * 2.29369E-6 + px_y * px_y * 8.65559E-008 - px_x * px_x * 8.46498E-008		  
 
      if (maptype == 'dsued'):
-          y_NP = 3066.6303030303
-          x_NP = 530.0
+          y_NP = 3054.281690140845
+          x_NP = 644.0
 
           dx = x_NP-px_x
           dy = y_NP+px_y
           dist = sqrt(dx*dx+dy*dy)
-          lat = 0.000000306366936*dist*dist -0.013485307234124*dist+90.000000000000014
+          lat = 0.000000331886825*dist*dist -0.013629374097183*dist+90.000000000000000
 
           c = atan(dx/dy)*rtd
-          lon = -1.005793690115992*c+10.000812929875398
+          lon = -1.000708892761411*c+9.998175118483397
 
      elif maptype == 'dmitte':
           y_NP = 2759.3575757576
@@ -210,10 +210,10 @@ if error != 1:
           print("Karte 'Deutschland Mitte' erkannt!")
           maptype = 'dmitte'
           
-     x1 = 107
-     y1 = 190
-     x2 = 633
-     y2 = 273
+     x1 = 220
+     y1 = 186
+     x2 = 704
+     y2 = 170
      p1 = y1*w+x1
      p2 = y2*w+x2
      if (pixels[p1] > 246 and pixels[p1] < 250) or (pixels[p2] > 246 and pixels[p2] < 250):
