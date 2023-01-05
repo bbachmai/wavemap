@@ -583,14 +583,17 @@ if error != 1:
                               
                               #Here is the new polygon point.
                               
-                              #If this is the second polygon point, subsequently write the first point to the file (this kills single point airspace artefacts)
-                              if points == 1:                              
+                              #If this is the third polygon point, subsequently write the first point to the file (this kills single point airspace artefacts)
+                              if points == 1:  
+                                   geostring_2nd = georef(p,q,maptype)
+                              if points == 2:
                                    fout.write("AC A\nAN WELLE\nAL 0\nAH 1\n")
                                    fout.write(geostring_initial) 
-                              
-                              #Now write the current point
-                              geostring = georef(p,q,maptype)         #Georeference the point with coordinates p, q 
-                              fout.write(geostring)                   #Write these coordinates to file: 
+                                   fout.write(geostring_2nd) 
+                              if points >= 2:                          
+                                 #Now write the current point
+                                 geostring = georef(p,q,maptype)         #Georeference the point with coordinates p, q 
+                                 fout.write(geostring)                   #Write these coordinates to file: 
                               matrix[q][p] = 3
                               points = points+1
                          
